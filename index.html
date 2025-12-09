@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Telegram Channel Finder</title>
+    <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    Channel Finder
+                </h1>
+                <p class="app-subtitle">Discover Telegram Channels & Groups</p>
+            </div>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Search channels and groups..."
+                        autocomplete="off"
+                    >
+                    <button id="clearBtn" class="clear-btn" style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Advanced Filters -->
+                <div class="filters">
+                    <button class="filter-btn active" data-type="all">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        </svg>
+                        All
+                    </button>
+                    <button class="filter-btn" data-type="channel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Channels
+                    </button>
+                    <button class="filter-btn" data-type="group">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        Groups
+                    </button>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="category-filters">
+                    <select id="categorySelect" class="category-select">
+                        <option value="">All Categories</option>
+                        <option value="technology">Technology</option>
+                        <option value="news">News & Media</option>
+                        <option value="education">Education</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="business">Business</option>
+                        <option value="crypto">Crypto & Finance</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="lifestyle">Lifestyle</option>
+                        <option value="sports">Sports</option>
+                        <option value="music">Music</option>
+                        <option value="art">Art & Design</option>
+                        <option value="science">Science</option>
+                    </select>
+
+                    <select id="languageSelect" class="language-select">
+                        <option value="">All Languages</option>
+                        <option value="en">English</option>
+                        <option value="ru">Russian</option>
+                        <option value="es">Spanish</option>
+                        <option value="ar">Arabic</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="de">German</option>
+                        <option value="fr">French</option>
+                        <option value="hi">Hindi</option>
+                        <option value="zh">Chinese</option>
+                    </select>
+                </div>
+
+                <button id="searchBtn" class="search-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    Search
+                </button>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Searching for channels...</p>
+        </div>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section" style="display: none;">
+            <div class="results-header">
+                <h2 class="results-title">Search Results</h2>
+                <span id="resultsCount" class="results-count">0 results</span>
+            </div>
+            <div id="resultsContainer" class="results-container">
+                <!-- Results will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <h3 class="empty-title">Start Your Search</h3>
+            <p class="empty-text">Enter keywords to find Telegram channels and groups</p>
+        </div>
+
+        <!-- No Results State -->
+        <div id="noResultsState" class="empty-state" style="display: none;">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <h3 class="empty-title">No Results Found</h3>
+            <p class="empty-text">Try different keywords or filters</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
